@@ -5,6 +5,9 @@ specify, implement, or verify changes concerning them. An artifact has an identi
 a role, a scope, and a lifecycle state. Relationships connect identified objects and
 artifacts; their meaning must be explicit.
 
+A gap declaration names an expected artifact that is missing or not observable. It is
+not an artifact and carries no claim authority.
+
 The ontology supplies domain semantics. The knowledge graph contains concrete
 objects, artifacts, and links interpreted using those semantics. Files and directory
 names are storage choices, not the metamodel.

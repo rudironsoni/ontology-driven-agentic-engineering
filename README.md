@@ -72,5 +72,8 @@ It does not judge whether prose is true or whether adopting ODAE improves engine
 The reference implementation is intentionally small. It has no graph database,
 service, custom agent protocol, generated site, or automated validation workflow.
 
+The document format can declare a missing or unobservable artifact as a gap. A gap has
+no authority and does not replace the absent artifact.
+
 Framework evidence concerns the framework implementation itself. A successful format
 or validator check would not establish improved software-engineering outcomes.

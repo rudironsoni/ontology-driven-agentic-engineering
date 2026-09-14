@@ -42,6 +42,8 @@ COMMON_RECORD_FIELDS = {
     "lifecycle",
 }
 
+GAP_FIELDS = {"id", "missing_role", "scope", "needed_by", "status", "reason"}
+
 
 def _is_text(value):
     return isinstance(value, str) and bool(value.strip())
@@ -51,7 +53,7 @@ def validate_document(document):
     errors = []
     if not isinstance(document, dict):
         return ["document: expected object"]
-    unknown_document_fields = sorted(set(document) - {"format", "project", "records", "relations"})
+    unknown_document_fields = sorted(set(document) - {"format", "project", "records", "relations", "gaps"})
     if unknown_document_fields:
         errors.append(f"document: unknown fields {', '.join(unknown_document_fields)}")
     if document.get("format") != "odae/v1":
@@ -61,12 +63,16 @@ def validate_document(document):
 
     records = document.get("records")
     relations = document.get("relations")
+    gaps = document.get("gaps", [])
     if not isinstance(records, list) or not records:
         errors.append("records: expected non-empty array")
         records = []
     if not isinstance(relations, list):
         errors.append("relations: expected array")
         relations = []
+    if not isinstance(gaps, list):
+        errors.append("gaps: expected array")
+        gaps = []
 
     record_by_id = {}
     for index, record in enumerate(records):
@@ -192,6 +198,44 @@ def validate_document(document):
         if record.get("role") == "evidence" and "verifies" not in outbound.get(record_id, set()):
             errors.append(f"{record_id}: evidence needs verifies relation")
 
+    gap_ids = set()
+    for index, gap in enumerate(gaps):
+        prefix = f"gaps[{index}]"
+        if not isinstance(gap, dict):
+            errors.append(f"{prefix}: expected object")
+            continue
+        if set(gap) != GAP_FIELDS:
+            errors.append(f"{prefix}: expected id, missing_role, scope, needed_by, status, and reason")
+            continue
+        gap_id = gap["id"]
+        if not _is_text(gap_id):
+            errors.append(f"{prefix}.id: expected non-empty string")
+        elif gap_id in gap_ids or gap_id in record_by_id:
+            errors.append(f"{prefix}.id: duplicate {gap_id}")
+        else:
+            gap_ids.add(gap_id)
+        missing_role = gap["missing_role"]
+        if not _is_text(missing_role) or missing_role not in ROLE_STATES:
+            errors.append(f"{prefix}.missing_role: unknown role {missing_role!r}")
+        status = gap["status"]
+        if not _is_text(status) or status not in {"missing", "not_observable"}:
+            errors.append(f"{prefix}.status: expected missing or not_observable")
+        if not _is_text(gap["reason"]):
+            errors.append(f"{prefix}.reason: expected non-empty string")
+        needed_by = gap["needed_by"]
+        if not _is_text(needed_by) or needed_by not in record_by_id:
+            errors.append(f"{prefix}.needed_by: unresolved {needed_by}")
+        scope = gap["scope"]
+        if not isinstance(scope, list) or any(not _is_text(item) for item in scope):
+            errors.append(f"{prefix}.scope: expected string array")
+            continue
+        for scope_id in scope:
+            target = record_by_id.get(scope_id)
+            if target is None:
+                errors.append(f"{prefix}.scope: unresolved {scope_id}")
+            elif target["role"] != "semantic":
+                errors.append(f"{prefix}.scope: {scope_id} is not semantic")
+
     for relation in relations:
         if not isinstance(relation, dict) or relation.get("type") != "verifies":
             continue
@@ -231,7 +275,8 @@ def main(argv):
         return 1
     record_count = len(document["records"])
     relation_count = len(document["relations"])
-    print(f"VALID {path}: {record_count} records, {relation_count} relations")
+    gap_count = len(document.get("gaps", []))
+    print(f"VALID {path}: {record_count} records, {relation_count} relations, {gap_count} gaps")
     return 0
 
 

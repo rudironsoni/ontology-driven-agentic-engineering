@@ -11,7 +11,7 @@ For a review of a bounded engineering change, examine:
 3. Whether governing decisions and realization obligations can be located.
 4. Whether superseded guidance identifies its successor where one exists.
 5. Whether evidence names the claim, evaluated revision, procedure, result, and limits.
-6. Whether missing or conflicting information is recorded rather than silently filled.
+6. Whether a gap records each required artifact that is missing or not observable.
 
 Record the reviewed revision and the scope of the check. Run the ODAE v1 structural
 validator with:

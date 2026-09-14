@@ -11,6 +11,7 @@ relations. JSON is the reference encoding, not the framework itself.
 | `project` | Project identifier. |
 | `records` | Semantic and engineering records. |
 | `relations` | Directed links between records. |
+| `gaps` | Optional declarations for required artifacts that are missing or not observable. |
 
 ## Records
 
@@ -58,11 +59,26 @@ A `verifies` relation is valid only when the evidence `evaluated_revision` match
 the implementation revision. A record with state `superseded` must be the target of a
 `supersedes` relation.
 
+## Gaps
+
+A gap declares an artifact that a record needs but the repository does not have or
+cannot observe. It is not a substitute record and has no authority.
+
+| Field | Meaning |
+|---|---|
+| `id` | Gap identifier. |
+| `missing_role` | Expected artifact role. |
+| `scope` | Semantic records affected by the gap. |
+| `needed_by` | Existing record that needs the missing artifact. |
+| `status` | `missing` or `not_observable`. |
+| `reason` | Why the artifact is unavailable. |
+
 ## Limits
 
 The validator checks document shape, role-specific fields, references, endpoint roles,
-lifecycle values, supersession, and evidence revision. It does not decide whether a
-claim is true, whether a decision is good, or whether two prose statements conflict.
+lifecycle values, supersession, evidence revision, and gap references. It does not
+decide whether a claim is true, whether a decision is good, or whether two prose
+statements conflict.
 
 The [minimal example](../examples/minimal/odae.json) is fictional. Its evidence record
 demonstrates the format and does not report a real payment-system result.

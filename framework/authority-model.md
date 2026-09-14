@@ -23,3 +23,6 @@ not evidence of their empirical benefit.
 A copy required at another delivery point does not become a second authority. Link it
 to its origin with `derived_from`, or record the mechanism that keeps both copies in
 sync.
+
+A gap has no claim authority. It states that a required artifact is missing or not
+observable, so readers must not treat its absence as support for a proposal.

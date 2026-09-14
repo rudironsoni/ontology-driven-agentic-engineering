@@ -1,0 +1,81 @@
+{
+  "format": "odae/v1",
+  "project": "fictional-rate-limit-service",
+  "records": [
+    {
+      "id": "semantic:rate-limit",
+      "role": "semantic",
+      "title": "Rate limit",
+      "scope": [],
+      "location": "domain/rate-limit.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "current",
+        "basis": "explicit",
+        "transition_owner": "API maintainers"
+      },
+      "definition": "A bound on client requests to the payment API."
+    },
+    {
+      "id": "proposal:remove-local-limit",
+      "role": "proposal",
+      "title": "Remove the local rate limit",
+      "scope": ["semantic:rate-limit"],
+      "location": "issues/upstream-limit.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "proposed",
+        "basis": "explicit",
+        "transition_owner": "API maintainers"
+      },
+      "summary": "Remove the local limit because an external report says the upstream service applies an equivalent limit."
+    },
+    {
+      "id": "decision:local-rate-limit",
+      "role": "decision",
+      "title": "Keep a local rate limit",
+      "scope": ["semantic:rate-limit"],
+      "location": "adrs/local-rate-limit.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "accepted",
+        "basis": "explicit",
+        "transition_owner": "API maintainers"
+      },
+      "decision": "Apply a local per-client rate limit.",
+      "rationale": "The service must enforce its own request bound."
+    }
+  ],
+  "relations": [
+    {
+      "id": "relation:proposal-target",
+      "type": "targets",
+      "from": "proposal:remove-local-limit",
+      "to": "semantic:rate-limit"
+    },
+    {
+      "id": "relation:decision-target",
+      "type": "targets",
+      "from": "decision:local-rate-limit",
+      "to": "semantic:rate-limit"
+    }
+  ],
+  "gaps": [
+    {
+      "id": "gap:upstream-implementation",
+      "missing_role": "implementation",
+      "scope": ["semantic:rate-limit"],
+      "needed_by": "proposal:remove-local-limit",
+      "status": "not_observable",
+      "reason": "The upstream implementation is outside this repository."
+    },
+    {
+      "id": "gap:upstream-evidence",
+      "missing_role": "evidence",
+      "scope": ["semantic:rate-limit"],
+      "needed_by": "proposal:remove-local-limit",
+      "status": "not_observable",
+      "reason": "Executed evidence for the upstream claim is outside this repository."
+    }
+  ]
+}

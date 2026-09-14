@@ -14,6 +14,9 @@ records observations about a stated claim and evaluated state. Identify what was
 checked, how it was checked, the result, and the limits of that observation. A planned
 test or illustrative example is not executed evidence.
 
+Do not invent a record when an implementation or evidence source is missing. Add a gap
+that names the expected role, the record that needs it, and why it is unavailable.
+
 Artifact role and storage format are distinct. A project may retain its existing
 documents while identifying their roles and relationships. The
 [record format](record-format.md) supplies one machine-readable representation without
