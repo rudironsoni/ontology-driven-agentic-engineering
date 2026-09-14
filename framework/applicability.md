@@ -14,6 +14,10 @@ roles, and make relevant relationships explicit. Do not require an RFC or ADR fo
 every edit. The significance of a decision and the expected lifetime of its knowledge
 should determine the recording effort.
 
+Agent consumption applies only when a project permits agents to participate. Plain
+files or an existing export command are sufficient when the agent can recover the
+required records and links.
+
 Extensions should address an identified domain need, preserve existing meanings,
 and state any new conformance obligations. Organizational authority and review
 responsibilities remain project decisions; ODAE does not assign them automatically.

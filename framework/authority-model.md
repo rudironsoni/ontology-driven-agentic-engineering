@@ -19,3 +19,7 @@ Resolve competing claims explicitly. A recent file timestamp is not sufficient t
 establish precedence. Supersession must identify the affected authority and scope;
 it does not erase the earlier rationale. These are framework interpretation rules,
 not evidence of their empirical benefit.
+
+A copy required at another delivery point does not become a second authority. Link it
+to its origin with `derived_from`, or record the mechanism that keeps both copies in
+sync.

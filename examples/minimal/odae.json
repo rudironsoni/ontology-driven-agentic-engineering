@@ -1,0 +1,160 @@
+{
+  "format": "odae/v1",
+  "project": "fictional-payment-service",
+  "records": [
+    {
+      "id": "semantic:payment-retry",
+      "role": "semantic",
+      "title": "Payment retry",
+      "scope": [],
+      "location": "domain/payment-retry.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "current",
+        "basis": "explicit",
+        "transition_owner": "payment maintainers"
+      },
+      "definition": "A repeated payment request for the same customer operation."
+    },
+    {
+      "id": "proposal:idempotent-retry",
+      "role": "proposal",
+      "title": "Add idempotent payment retries",
+      "scope": ["semantic:payment-retry"],
+      "location": "rfcs/idempotent-retry.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "accepted",
+        "basis": "explicit",
+        "transition_owner": "payment maintainers"
+      },
+      "summary": "Use a stable request key to recognize repeated payment requests."
+    },
+    {
+      "id": "decision:retry-token",
+      "role": "decision",
+      "title": "Use a retry token",
+      "scope": ["semantic:payment-retry"],
+      "location": "adrs/retry-token.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "superseded",
+        "basis": "explicit",
+        "transition_owner": "payment maintainers"
+      },
+      "decision": "Use a service-generated retry token.",
+      "rationale": "The first design did not accept caller-provided keys."
+    },
+    {
+      "id": "decision:idempotency-key",
+      "role": "decision",
+      "title": "Use caller-provided idempotency keys",
+      "scope": ["semantic:payment-retry"],
+      "location": "adrs/idempotency-key.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "accepted",
+        "basis": "explicit",
+        "transition_owner": "payment maintainers"
+      },
+      "decision": "Use a caller-provided idempotency key for each payment operation.",
+      "rationale": "The caller must be able to repeat a timed-out request safely."
+    },
+    {
+      "id": "specification:payment-retry",
+      "role": "specification",
+      "title": "Payment retry contract",
+      "scope": ["semantic:payment-retry"],
+      "location": "specs/payment-retry.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "active",
+        "basis": "explicit",
+        "transition_owner": "payment maintainers"
+      },
+      "obligation": "Repeating one payment operation with the same key must not create a second charge.",
+      "specification_kind": "normative"
+    },
+    {
+      "id": "implementation:payment-handler",
+      "role": "implementation",
+      "title": "Payment request handler",
+      "scope": ["semantic:payment-retry"],
+      "location": "src/payment_handler.py",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "current",
+        "basis": "explicit",
+        "transition_owner": "source control"
+      },
+      "path": "src/payment_handler.py"
+    },
+    {
+      "id": "evidence:duplicate-charge-test",
+      "role": "evidence",
+      "title": "Duplicate charge test result",
+      "scope": ["semantic:payment-retry"],
+      "location": "evidence/duplicate-charge-test.md",
+      "revision": "example-1",
+      "lifecycle": {
+        "state": "recorded",
+        "basis": "explicit",
+        "transition_owner": "test runner"
+      },
+      "claim": "The fictional handler creates one charge for two requests with the same key.",
+      "procedure": "Run the fictional duplicate-request scenario.",
+      "result": "pass",
+      "evaluated_revision": "example-1"
+    }
+  ],
+  "relations": [
+    {
+      "id": "relation:proposal-target",
+      "type": "targets",
+      "from": "proposal:idempotent-retry",
+      "to": "semantic:payment-retry"
+    },
+    {
+      "id": "relation:decision-proposal",
+      "type": "decides",
+      "from": "decision:idempotency-key",
+      "to": "proposal:idempotent-retry"
+    },
+    {
+      "id": "relation:decision-target",
+      "type": "targets",
+      "from": "decision:idempotency-key",
+      "to": "semantic:payment-retry"
+    },
+    {
+      "id": "relation:decision-supersession",
+      "type": "supersedes",
+      "from": "decision:idempotency-key",
+      "to": "decision:retry-token"
+    },
+    {
+      "id": "relation:decision-specification",
+      "type": "constrains",
+      "from": "decision:idempotency-key",
+      "to": "specification:payment-retry"
+    },
+    {
+      "id": "relation:specification-target",
+      "type": "targets",
+      "from": "specification:payment-retry",
+      "to": "semantic:payment-retry"
+    },
+    {
+      "id": "relation:implementation-specification",
+      "type": "realizes",
+      "from": "implementation:payment-handler",
+      "to": "specification:payment-retry"
+    },
+    {
+      "id": "relation:evidence-implementation",
+      "type": "verifies",
+      "from": "evidence:duplicate-charge-test",
+      "to": "implementation:payment-handler"
+    }
+  ]
+}

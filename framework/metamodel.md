@@ -11,8 +11,10 @@ names are storage choices, not the metamodel.
 
 The framework separates semantic, artifact, authority, relationship, lifecycle,
 conformance, and applicability concerns. A claim must be interpreted with its scope
-and revision. An authoritative requirement can conflict with implemented behavior;
-that conflict is information to examine, not permission to overwrite either record.
+and revision. Its lifecycle basis distinguishes an explicit state from one that was
+inferred, defaulted, missing, or unresolved. An authoritative requirement can conflict
+with implemented behavior; that conflict is information to examine, not permission to
+overwrite either record.
 
-This is a conceptual definition. Concrete fields, cardinalities, serialization, and
-validation rules require a separately specified implementation contract.
+The [record format](record-format.md) defines the ODAE v1 fields, serialization, and
+deterministic validation boundary.

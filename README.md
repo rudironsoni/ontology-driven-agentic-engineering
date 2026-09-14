@@ -32,13 +32,13 @@ Start with the [metamodel](framework/metamodel.md), then read the
 [authority](framework/authority-model.md), [relationship](framework/relationship-model.md),
 [lifecycle](framework/lifecycle-model.md), and [conformance](framework/conformance.md)
 models. [Applicability](framework/applicability.md) defines the intended adoption
-boundary.
+boundary. The [record format](framework/record-format.md) defines the executable JSON
+representation.
 
 ODAE is a Design Science Research design artifact. Its definitions describe the
 proposed mechanism; they do not establish that the mechanism improves outcomes.
-Semantic continuity is a provisional quality objective: engineering meaning,
-rationale, constraints, authority, and realization relationships should remain
-recoverable and internally consistent across artifacts and change.
+The framework aims to keep meaning, rationale, constraints, authority, and realization
+links recoverable as the system changes.
 
 ## Initial adoption
 
@@ -53,18 +53,24 @@ scope using the conformance checklist. Extend the vocabulary only when a concret
 domain need requires it, documenting the meaning and permitted endpoints of each
 new relationship.
 
+Validate an ODAE document with Python 3.11 or newer:
+
+```sh
+python3 validator/validate.py examples/minimal/odae.json
+```
+
+The example is fictional. Its evidence record demonstrates the format and does not
+report a real payment-system result.
+
 ## Current maturity
 
-This initial revision contains conceptual framework definitions and a manual
-conformance checklist. It does not yet supply a machine-readable schema, executable
-validator, validated serialization, automated validation workflow, or completed
-adoption example. It must not be described as a validated implementation.
+ODAE v1 contains the conceptual framework, a JSON record format, a standard-library
+validator, and one fictional complete example. The validator checks structure,
+references, relation endpoints, lifecycle values, supersession, and evidence revision.
+It does not judge whether prose is true or whether adopting ODAE improves engineering.
 
-The intended initial representation is Markdown with typed metadata. Serialization
-and executable validation remain open design questions. Consequential framework
-changes should proceed from an open proposal to an actual decision, specification,
-implementation, and executed framework evidence. No accepted decision history is
-reconstructed retroactively.
+The reference implementation is intentionally small. It has no graph database,
+service, custom agent protocol, generated site, or automated validation workflow.
 
-Framework evidence concerns the framework implementation itself. A successful schema
+Framework evidence concerns the framework implementation itself. A successful format
 or validator check would not establish improved software-engineering outcomes.
